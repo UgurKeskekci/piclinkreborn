@@ -1,17 +1,19 @@
 // src/screens/HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions } from 'react-native';
 
 const events = [
   { id: '1', title: 'Wedding', image: require('../../assets/wedding.jpeg') },
   { id: '2', title: 'First Meeting', image: require('../../assets/meeting.jpeg') },
-  { id: '3', title: 'Happy Hour', image: require('../../assets/happyhour.jpeg') },
-  { id: '4', title: 'Conference', image: require('../../assets/conference.jpeg') },
+ 
 ];
+
+const { width } = Dimensions.get('window');
+const itemSize = (width - 40) / 2; // Ekran genişliğine göre boyut ayarlama
 
 export default function HomeScreen() {
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.eventContainer}>
+    <TouchableOpacity style={[styles.eventContainer, { width: itemSize, height: itemSize }]}>
       <Image source={item.image} style={styles.eventImage} />
       <Text style={styles.eventTitle}>{item.title}</Text>
     </TouchableOpacity>
@@ -26,6 +28,7 @@ export default function HomeScreen() {
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -40,21 +43,28 @@ const styles = StyleSheet.create({
   list: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 16,
+    paddingVertical: 16,
   },
   row: {
     flex: 1,
-    justifyContent: "space-around"
+    justifyContent: 'space-between',
+    marginBottom: 10, // Satır arası boşluk azaltma
   },
   eventContainer: {
-    flex: 1,
-    margin: 10,
     alignItems: 'center',
+    margin: 5, // Yatay boşluk azaltma
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
   },
   eventImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 8,
+    width: '100%',
+    height: '80%',
   },
   eventTitle: {
     marginTop: 8,
@@ -62,5 +72,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
+    padding: 5,
   },
 });
