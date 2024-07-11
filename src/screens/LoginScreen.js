@@ -1,14 +1,30 @@
-// src/screens/LoginScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Add login logic here
-    navigation.navigate('HomeTabs');
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://192.168.1.6:8000/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      // Store the token and navigate to the home screen
+      navigation.navigate('HomeTabs');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
 
   return (
