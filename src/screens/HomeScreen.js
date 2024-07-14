@@ -1,17 +1,24 @@
 // src/screens/HomeScreen.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions } from 'react-native';
 
-const events = [
+const initialEvents = [
   { id: '1', title: 'Wedding', image: require('../../assets/wedding.jpeg') },
   { id: '2', title: 'First Meeting', image: require('../../assets/meeting.jpeg') },
- 
 ];
 
 const { width } = Dimensions.get('window');
 const itemSize = (width - 40) / 2; // Ekran genişliğine göre boyut ayarlama
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
+  const [events, setEvents] = useState(initialEvents);
+
+  useEffect(() => {
+    if (route.params?.newEvent) {
+      setEvents([...events, route.params.newEvent]);
+    }
+  }, [route.params?.newEvent]);
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={[styles.eventContainer, { width: itemSize, height: itemSize }]}>
       <Image source={item.image} style={styles.eventImage} />
