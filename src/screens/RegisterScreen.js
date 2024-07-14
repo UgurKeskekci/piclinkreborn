@@ -8,7 +8,7 @@ export default function RegisterScreen({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = () => {
-    // Add registration logic here
+   
     navigation.navigate('HomeTabs');
   };
 
