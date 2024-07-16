@@ -1,13 +1,40 @@
-// src/screens/ProfileScreen.js
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ route }) {
+  const { userId } = route.params;
+  console.log("ProfileScreen - userId:", userId);  // Debugging log
+
   const [profileImage, setProfileImage] = useState(null);
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const fetchUserData = async (userId) => {
+    console.log("Fetching data for userId:", userId);  // Debugging log
+    try {
+      const response = await fetch(`http://192.168.1.6:8000/user/${userId}`);
+      if (!response.ok) {
+        const data = await response.json(); // Log detailed error response
+        console.error(data);
+        throw new Error('Failed to fetch user data');
+      }
+      const data = await response.json();
+      setFirstName(data.name);
+      setLastName(data.surname);
+      setEmail(data.email);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData(userId);
+  }, [userId]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -26,6 +53,10 @@ export default function ProfileScreen() {
     // Implement change password logic here
     alert('Change Password clicked');
   };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <View style={styles.container}>

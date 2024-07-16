@@ -20,8 +20,10 @@ export default function LoginScreen({ navigation }) {
       }
 
       const data = await response.json();
-      // Store the token and navigate to the home screen
-      navigation.navigate('HomeTabs');
+      // Assuming the response contains the user ID
+      const userId = data.userId;  // Replace with the actual field name from your response
+      console.log("LoginScreen - userId:", userId);  // Debugging log
+      navigation.navigate('HomeTabs', { screen: 'Profile', params: { userId } });
     } catch (error) {
       Alert.alert('Error', error.message);
     }
