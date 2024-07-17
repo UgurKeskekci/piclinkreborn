@@ -1,24 +1,50 @@
-// src/screens/CreateEventScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput,Switch, TouchableOpacity, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function CreateEventScreen({ navigation }) {
+export default function CreateEventScreen({ route, navigation }) {
+  const { userId } = route.params;  // Get the userId from route params
   const [title, setTitle] = useState('');
-  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [image, setImage] = useState(null);
 
-  const handleCreateEvent = () => {
-    // Mock event creation logic
+  const handleCreateEvent = async () => {
     const newEvent = {
-      id: Math.random().toString(),
       title,
-      type,
-      isPrivate,
-      image,
+      description,
+      is_private: isPrivate,
     };
-    navigation.navigate('HomeTabs', { screen: 'Home', params: { newEvent } });
+  
+    console.log('Request payload:', newEvent);
+  
+    try {
+      const response = await fetch(`http://192.168.1.6:8000/create-event/?user_id=${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newEvent),
+      });
+  
+      console.log('Response status:', response.status);
+  
+      const responseText = await response.text();
+      console.log('Response text:', responseText);
+  
+      if (!response.ok) {
+        throw new Error(responseText || 'Failed to create event');
+      }
+  
+      const data = JSON.parse(responseText);
+      console.log('Response data:', data);
+  
+      Alert.alert('Success', 'Event created successfully');
+      navigation.navigate('HomeTabs', { screen: 'Home', params: { newEvent: data } });
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', error.message);
+    }
   };
 
   const pickImage = async () => {
@@ -46,9 +72,9 @@ export default function CreateEventScreen({ navigation }) {
       />
       <TextInput
         style={styles.input}
-        placeholder="Event Type (e.g., Wedding, Party)"
-        value={type}
-        onChangeText={setType}
+        placeholder="Event description (e.g., Wedding, Party)"
+        value={description}
+        onChangeText={setDescription}
         placeholderTextColor="#aaa"
       />
       <View style={styles.switchContainer}>

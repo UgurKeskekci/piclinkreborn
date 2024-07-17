@@ -42,7 +42,7 @@ function HomeTabs({ route }) {
     >
       <Tab.Screen name="Home" component={HomeScreen} initialParams={{ userId }} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
-      <Tab.Screen name="Create" component={CreateEventScreen} />
+      <Tab.Screen name="Create" component={CreateEventScreen} initialParams={{ userId }} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{ userId }} />
     </Tab.Navigator>
