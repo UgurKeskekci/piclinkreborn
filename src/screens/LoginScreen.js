@@ -4,8 +4,13 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const userId = 1
 
+  
   const handleLogin = async () => {
+
+    navigation.navigate('HomeTabs', { userId }); 
+    /** 
     try {
       const response = await fetch('http://192.168.1.6:8000/login/', {
         method: 'POST',
@@ -26,6 +31,7 @@ export default function LoginScreen({ navigation }) {
     } catch (error) {
       Alert.alert('Error', error.message);
     }
+    */
   };
 
   return (

@@ -10,7 +10,7 @@ const initialEvents = [
 const { width } = Dimensions.get('window');
 const itemSize = (width - 40) / 2; // Ekran genişliğine göre boyut ayarlama
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen({ route, navigation }) {
   const [events, setEvents] = useState(initialEvents);
 
   useEffect(() => {
@@ -20,7 +20,10 @@ export default function HomeScreen({ route }) {
   }, [route.params?.newEvent]);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={[styles.eventContainer, { width: itemSize, height: itemSize }]}>
+    <TouchableOpacity
+      style={[styles.eventContainer, { width: itemSize, height: itemSize }]}
+      onPress={() => navigation.navigate('EventDetail', { event: item })}
+    >
       <Image source={item.image} style={styles.eventImage} />
       <Text style={styles.eventTitle}>{item.title}</Text>
     </TouchableOpacity>

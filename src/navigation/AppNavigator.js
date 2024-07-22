@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,13 +9,14 @@ import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import CreateEventScreen from '../screens/CreateEventScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EventDetailScreen from '../screens/EventDetailScreen';
+import PhotoDetailScreen from '../screens/PhotoDetailScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeTabs({ route }) {
   const { userId } = route.params;
-  console.log("HomeTabs - userId:", userId);  // Debugging log
 
   return (
     <Tab.Navigator
@@ -40,7 +41,7 @@ function HomeTabs({ route }) {
         tabBarStyle: { display: 'flex' },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} initialParams={{ userId }} />
+      <Tab.Screen name="Home" component={HomeStack} initialParams={{ userId }} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Create" component={CreateEventScreen} initialParams={{ userId }} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
@@ -48,6 +49,21 @@ function HomeTabs({ route }) {
     </Tab.Navigator>
   );
 }
+
+function HomeStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="EventDetail" component={EventDetailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PhotoDetail" component={PhotoDetailScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
 
 function ExploreScreen() {
   return (
