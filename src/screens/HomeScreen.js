@@ -8,7 +8,7 @@ const initialEvents = [
 ];
 
 const { width } = Dimensions.get('window');
-const itemSize = (width - 40) / 2; // Ekran genişliğine göre boyut ayarlama
+const itemSize = (width - 40) / 2; 
 
 export default function HomeScreen({ route }) {
   const [events, setEvents] = useState(initialEvents);
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: 'space-between',
-    marginBottom: 10, // Satır arası boşluk azaltma
+    marginBottom: 10, 
   },
   eventContainer: {
     alignItems: 'center',
-    margin: 5, // Yatay boşluk azaltma
+    margin: 5, 
     borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: '#fff',

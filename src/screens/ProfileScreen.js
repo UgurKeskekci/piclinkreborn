@@ -23,7 +23,7 @@ export default function ProfileScreen() {
   };
 
   const handleChangePassword = () => {
-    // Implement change password logic here
+   
     alert('Change Password clicked');
   };
 

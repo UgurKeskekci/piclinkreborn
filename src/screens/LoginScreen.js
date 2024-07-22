@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
       }
 
       const data = await response.json();
-      // Store the token and navigate to the home screen
+      
       navigation.navigate('HomeTabs');
     } catch (error) {
       Alert.alert('Error', error.message);
