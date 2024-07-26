@@ -50,12 +50,15 @@ function HomeTabs({ route }) {
   );
 }
 
-function HomeStack() {
+function HomeStack({ route, navigation }) {
+  const { userId } = route.params;
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
+        initialParams={{ userId }}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="EventDetail" component={EventDetailScreen} options={{ headerShown: false }} />
@@ -63,6 +66,7 @@ function HomeStack() {
     </Stack.Navigator>
   );
 }
+
 
 
 function ExploreScreen() {

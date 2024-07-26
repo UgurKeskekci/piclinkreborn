@@ -8,11 +8,8 @@ export default function LoginScreen({ navigation }) {
 
   
   const handleLogin = async () => {
-
-    navigation.navigate('HomeTabs', { userId }); 
-    /** 
     try {
-      const response = await fetch('http://192.168.1.6:8000/login/', {
+      const response = await fetch('http://192.168.0.44:8000/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +28,7 @@ export default function LoginScreen({ navigation }) {
     } catch (error) {
       Alert.alert('Error', error.message);
     }
-    */
+   
   };
 
   return (

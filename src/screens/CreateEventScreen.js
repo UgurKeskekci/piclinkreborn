@@ -3,42 +3,44 @@ import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Image, Ale
 import * as ImagePicker from 'expo-image-picker';
 
 export default function CreateEventScreen({ route, navigation }) {
-  const { userId } = route.params;  // Get the userId from route params
+  const { userId } = route.params;
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageUri, setImageUri] = useState('');
 
   const handleCreateEvent = async () => {
     const newEvent = {
       title,
       description,
       is_private: isPrivate,
+      event_photo: imageUri,
     };
-  
+
     console.log('Request payload:', newEvent);
-  
+
     try {
-      const response = await fetch(`http://192.168.1.6:8000/create-event/?user_id=${userId}`, {
+      const response = await fetch(`http://192.168.0.44:8000/create-event/?user_id=${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newEvent),
       });
-  
+
       console.log('Response status:', response.status);
-  
+
       const responseText = await response.text();
       console.log('Response text:', responseText);
-  
+
       if (!response.ok) {
         throw new Error(responseText || 'Failed to create event');
       }
-  
+
       const data = JSON.parse(responseText);
       console.log('Response data:', data);
-  
+
       Alert.alert('Success', 'Event created successfully');
       navigation.navigate('HomeTabs', { screen: 'Home', params: { newEvent: data } });
     } catch (error) {
@@ -57,6 +59,40 @@ export default function CreateEventScreen({ route, navigation }) {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      uploadImage(result.uri);
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    console.log("Uploading image:", uri);
+    let formData = new FormData();
+    formData.append('file', {
+      uri,
+      name: `event_${userId}.jpg`,
+      type: 'image/jpeg'
+    });
+
+    try {
+      const response = await fetch(`http://192.168.0.44:8000/upload-photo/${userId}`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const data = await response.json();
+      console.log("Upload response status:", response.status);
+      console.log("Upload response data:", data);
+      if (!response.ok) {
+        console.error("Upload failed:", data);
+        throw new Error(data.detail || 'Error uploading photo');
+      }
+      Alert.alert('Success', 'Event photo uploaded successfully');
+      setImageUri(`http://192.168.0.44:8000/uploads/${data.filename}`);
+    } catch (error) {
+      console.error("Error uploading image:", error.message);
+      Alert.alert('Error', error.message);
     }
   };
 

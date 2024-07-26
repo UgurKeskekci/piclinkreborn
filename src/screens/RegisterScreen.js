@@ -14,7 +14,7 @@ export default function RegisterScreen({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://192.168.1.6:8000/create-user/', {
+      const response = await fetch('http://192.168.0.44:8000/create-user/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
